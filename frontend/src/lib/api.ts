@@ -48,7 +48,8 @@ async function request<T>(path: string, options: RequestInit & { json?: unknown 
   const body = await response.json().catch(() => null);
   if (!response.ok) {
     const error = body?.error;
-    const isAuthCall = path.startsWith("/auth/login") || path.startsWith("/auth/register");
+    // A 401 from these just means "not signed in", not "your session expired".
+    const isAuthCall = ["/auth/login", "/auth/register", "/auth/me"].some((p) => path.startsWith(p));
     if (response.status === 401 && !isAuthCall) onUnauthorized?.();
     throw new ApiError(
       response.status,

@@ -69,3 +69,12 @@ export function useAuth(): AuthContextValue {
   if (!context) throw new Error("useAuth must be used inside AuthProvider");
   return context;
 }
+
+/** For the login/register pages: send an already signed-in user to the dashboard. */
+export function useRedirectIfSignedIn() {
+  const { user, loading } = useAuth();
+  const router = useRouter();
+  useEffect(() => {
+    if (!loading && user) router.replace("/dashboard");
+  }, [loading, user, router]);
+}

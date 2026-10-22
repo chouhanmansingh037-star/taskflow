@@ -12,7 +12,9 @@ export function Modal({ title, onClose, children }: { title: string; onClose: ()
   useEffect(() => {
     const dialog = ref.current;
     if (dialog && !dialog.open) dialog.showModal();
-    return () => dialog?.close();
+    // No cleanup that calls close(): in dev, React Strict Mode runs effects twice, and close()
+    // would fire the dialog's "close" event, which calls onClose and dismisses the modal instantly.
+    // Unmounting the element already removes an open dialog.
   }, []);
 
   return (

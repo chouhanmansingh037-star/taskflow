@@ -5,12 +5,13 @@ import { useRouter } from "next/navigation";
 import { useState, type FormEvent } from "react";
 import { AuthCard } from "@/components/AuthCard";
 import { ErrorAlert, Field } from "@/components/ui";
-import { useAuth } from "@/context/AuthContext";
+import { useAuth, useRedirectIfSignedIn } from "@/context/AuthContext";
 import { ApiError } from "@/lib/api";
 
 export default function LoginPage() {
   const { login } = useAuth();
   const router = useRouter();
+  useRedirectIfSignedIn();
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [error, setError] = useState<string | null>(null);
